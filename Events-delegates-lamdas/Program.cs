@@ -2,24 +2,38 @@
 
 namespace Events_delegates_lamdas
 {
+    public delegate int BizRulesDelegate(int x, int y);
     class Program
     {
         static void Main(string[] args)
         {
-            //WorkPerformedHandler del1 = new WorkPerformedHandler(WorkPerformed1);
-            //WorkPerformedHandler del2 = new WorkPerformedHandler(WorkPerformed2);
-            //WorkPerformedHandler del3 = new WorkPerformedHandler(WorkPerformed3);
+            BizRulesDelegate addDel = (x, y) => x + y;
+            BizRulesDelegate multiplyDel = (x, y) => x * y;
 
-            //del1 += del2 + del3;
+            var data = new ProcessData();
+            //data.Process(2, 3, multiplyDel);
 
-            //int finalhours = del1(10, WorkType.GenerateReports);
-            //Console.WriteLine(finalhours);
+            Action<int, int> myAction = (x, y) => Console.WriteLine(x + y);
+            Action<int, int> myMultiplyAction = (x, y) => Console.WriteLine(x * y);
+            data.ProcessAction(2, 3, myAction);
 
             var worker = new Worker();
-
+            worker.WorkPerformed += (s,e) => Console.WriteLine("Hours Worked : " + e.Hours + " " + e.WorkType); ;
+            worker.WorkCompleted += (s,e) => Console.WriteLine("Worker is done");
+            worker.DoWork(8, WorkType.GenerateReports);
             
             Console.Read();
         }
+
+        //static void Worker_WorkPerformed(object sender, WorkPerformedEventArgs e)
+        //{
+        //    Console.WriteLine("Hours Worked : " + e.Hours + " " + e.WorkType);
+        //}
+
+        //static void Worker_WorkCompleted(object sender, EventArgs e)
+        //{
+        //    Console.WriteLine("Worker is done");
+        //}
 
         //static void DoWork(WorkPerformedHandler del)
         //{
@@ -34,7 +48,7 @@ namespace Events_delegates_lamdas
 
         //static int WorkPerformed2(int hours, WorkType workType)
         //{
-        //    Console.WriteLine("WorkPerformed2 called " + hours.ToString());
+        //    Console.WriteLine("WorkPerformed2 called " + hours.ToString());    
         //    return hours + 2;
         //}
 
